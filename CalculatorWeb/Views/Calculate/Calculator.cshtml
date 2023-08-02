@@ -1,0 +1,155 @@
+﻿@model string
+@{
+    ViewData["Title"] = "Calculator";
+}
+<head>
+    <link rel="stylesheet" href="~/css/button.css" />
+    <style>
+
+        .equalButton {
+            appearance: none;
+            background-color: #FAFBFC;
+            border: 1px solid rgba(27, 31, 35, 0.15);
+            border-radius: 6px;
+            box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+            box-sizing: border-box;
+            color: #24292E;
+            cursor: pointer;
+            display: inline-block;
+            font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            list-style: none;
+            padding: 6px 16px;
+            position: relative;
+            transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            vertical-align: middle;
+            white-space: nowrap;
+            word-wrap: break-word;
+        }
+
+            .equalButton:hover {
+                background-color: #F3F4F6;
+                text-decoration: none;
+                transition-duration: 0.1s;
+            }
+
+            .equalButton:disabled {
+                background-color: #FAFBFC;
+                border-color: rgba(27, 31, 35, 0.15);
+                color: #959DA5;
+                cursor: default;
+            }
+
+            .equalButton:active {
+                background-color: #EDEFF2;
+                box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+                transition: none 0s;
+            }
+
+            .equalButton:focus {
+                outline: 1px transparent;
+            }
+
+            .equalButton:before {
+                display: none;
+            }
+
+            .equalButton:-webkit-details-marker {
+                display: none;
+            }
+
+    </style>
+</head>
+
+<body>
+
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <form method="post" asp-action="Calculator">
+                <div class="calculator card">
+                    <div class="form-group">
+                        <input type="text" id="calc-input" name="s" value="" class="calculator-screen z-depth-1" required />
+                    </div>
+
+                    <div class="calculator-keys">
+                        <button type="button" class="button-4" value="+">+</button>
+                        <button type="button" class="button-4" value="-">-</button>
+                        <button type="button" class="button-4" value="*">&times;</button>
+                        <button type="button" class="button-4" value="/">&divide;</button>
+                        <button type="button" class="button-4" value="7">7</button>
+                        <button type="button" class="button-4" value="8">8</button>
+                        <button type="button" class="button-4" value="9">9</button>
+                        <button type="button" class="button-4" value="^">^</button>
+                        <button type="button" class="button-4" value="4">4</button>
+                        <button type="button" class="button-4" value="5">5</button>
+                        <button type="button" class="button-4" value="6">6</button>
+                        <button type="button" class="button-4" onclick="deleteCharacter()">&larr;</button>
+                        <button type="button" class="button-4" value="1">1</button>
+                        <button type="button" class="button-4" value="2">2</button>
+                        <button type="button" class="button-4" value="3">3</button>
+                        <button type="button" class="all-clear function btn btn-danger btn-sm" value="all-clear" onclick="clearInput()">AC</button>
+
+                    </div>
+                    <ul>
+                        <button type="button" class="button-4 large-button" value="0">0</button>&emsp;&emsp;
+                        <button type="submit" style=" background: aqua" class="equalButton large-button" value="=">=</button>
+                    </ul>
+
+
+
+                </div>
+            </form>
+
+
+        </div>
+        <div class="calculator card">
+
+            <label type="text" class="calculator-result-area z-depth-1" style="overflow-y: auto">
+                @if (ViewBag.Result != null)
+                {
+                    @foreach (var cachedResult in ViewBag.CachedResults)
+                    {
+                        <div @*class="calculator-result"*@ style="text-align :left">
+                            <output style="font-family: 'Global User Interface'; font-size: 15px">
+                                @cachedResult.Key &rarr; Sonuç: @cachedResult.Value
+                            </output>
+                        </div>
+                    }
+
+                }
+            </label>
+
+
+        </div>
+    </div>
+    <script>
+        var buttons = document.getElementsByClassName("button-4");
+        var input = document.getElementById("calc-input");
+
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener('click', function () {
+                var value = this.value;
+                input.value += value;
+            });
+        }
+
+        function clearInput() {
+            input.value = '';
+        }
+
+        function deleteCharacter() {
+            var inputField = document.getElementById("calc-input");
+            var currentValue = inputField.value;
+
+            inputField.value = currentValue.slice(0, -1);
+        }
+
+    </script>
+
+</body>
